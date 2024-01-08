@@ -5,6 +5,7 @@ import { BsCart2 } from "react-icons/bs";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 
 const Headersection = styled('div')({
@@ -56,6 +57,7 @@ const drawerWidth = 240;
 function Header() {
     const [open, setOpen] = useState(false);
     const [openaccount, setOpenaccount] = useState(false);
+    const cartdata= useSelector((state)=>state.cart)
     return (
         <Headersection>
             <Container>
@@ -87,7 +89,7 @@ function Header() {
 
                             <NavLink to="/cart">
                                 <BsCart2 color="#ff3f26" />
-                                <span>0</span>
+                                <span>{cartdata.length}</span>
                             </NavLink>
 
                         </LinkBox>
