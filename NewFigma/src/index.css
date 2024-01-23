@@ -1,0 +1,29 @@
+body{
+  margin:0;
+  padding:0;
+  background-color: #fff;
+  font-family: 'Nunito Sans', sans-serif;
+
+}
+a{
+  text-decoration:none;
+}
+a:hover{
+  text-decoration: none;
+}
+@keyframes sub-menu {
+  0%{
+      width:0%;
+  }
+  100%{
+      width: 100%;
+  }
+  
+}
+.slick-slide .slick-active{
+  width:200px!important;
+}
+.css-4hqtrk-MuiButtonBase-root-MuiButton-root{
+  background:#143e6b;
+  color:#fff;
+}
