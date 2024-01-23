@@ -46,7 +46,7 @@ function FeaturedProduct() {
 
                 </Box>
                 <Grid container spacing={3}>
-                    {products.slice(1,5).map((data) => {
+                    {products.map((data) => {
                         return (
                             <Grid item lg={3} md={4} sm={6} xs={12}>
                                 <Box>

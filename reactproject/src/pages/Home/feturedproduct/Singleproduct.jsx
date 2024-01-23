@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Container,Box,Typography,Button,Grid,styled } from "@mui/material";
+import { Container,Box,Typography,Button,Grid,styled, TextField } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../../../Homelayout/Header";
 import Footer from "../../../Homelayout/Footer";
 import { useDispatch } from "react-redux";
 import { addtocart } from "../../../Redux/CartSlice";
+import { toast } from "react-toastify";
 
 
 const Wrapper= styled('div')({
@@ -20,6 +21,7 @@ const Wrapper= styled('div')({
 
 function Singleproduct(){
 const[ singleproduct,setSingleproduct]= useState({})
+const [item,setItem]= useState(1);
 const {id}= useParams();
 const dispatch= useDispatch();
 
@@ -37,6 +39,18 @@ const dispatch= useDispatch();
     useEffect(()=>{
         getsingleproduct();
     },[])
+
+    const addtocarthandler = () => {
+        const quantity = parseInt(item, 10);
+    
+        if (!isNaN(quantity) && quantity > 0) {
+          dispatch(addtocart({ ...singleproduct, quantity }));
+          toast.success("Item added successfully");
+        } else {
+          toast.error("Invalid quantity");
+        }
+      };
+    
     return(
        <>
        <Header/>
@@ -55,7 +69,8 @@ const dispatch= useDispatch();
                                 <Typography variant="h3" pt={2} pb={2}>£{singleproduct.price}</Typography>
                                 <Typography variant="body1">{singleproduct.description}</Typography>
                                 <Box mt={3}>
-                                    <Button variant="contained" color="primary" onClick={()=>dispatch(addtocart(singleproduct))}>ADD TO CART</Button>
+                                    <TextField variant="outlined" size="small" type="number" value={item} onChange={(e)=>setItem(e.target.value)} sx={{width:'70px',marginRight:'20px'}}/>
+                                    <Button variant="contained" color="primary" onClick={addtocarthandler}>ADD TO CART</Button>
                                 </Box>
                         </Box>
                     </Grid>

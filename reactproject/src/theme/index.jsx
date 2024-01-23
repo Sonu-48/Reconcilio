@@ -2,6 +2,7 @@ import { createTheme } from "@mui/material";
 import typography from './typography';
 
 export const theme= createTheme({
+
     typography,
     fontFamily:"'Poppins',sans-serif",
     main:'#415161',
@@ -48,6 +49,13 @@ export const theme= createTheme({
               "&:hover":{
                 color:'#ff3f26'
               }
+            }
+          }
+        },
+        MuiBadge:{
+          styleOverrides:{
+            badge:{
+              background:'#ff5151'
             }
           }
         }

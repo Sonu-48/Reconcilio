@@ -1,11 +1,14 @@
-import { AppBar, Box, Container, Drawer, IconButton, List, ListItem, ListItemButton, Paper, Toolbar, Typography, styled } from "@mui/material";
-import React, { useState } from "react";
+import { AppBar, Badge, Box, Container, Drawer, IconButton, List, ListItem, ListItemButton, Paper, Stack, TextField, Toolbar, Typography, styled } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { BsCart2 } from "react-icons/bs";
+import { RiShoppingBasketFill } from "react-icons/ri";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addtocart } from "../Redux/CartSlice";
+import Cartcomponent from "../components/Cartcomponent";
+import axios from "axios";
 
 
 const Headersection = styled('div')({
@@ -57,15 +60,64 @@ const drawerWidth = 240;
 function Header() {
     const [open, setOpen] = useState(false);
     const [openaccount, setOpenaccount] = useState(false);
-    const cartdata= useSelector((state)=>state.cart)
+    const [opencart, setOpencart] = useState(false);
+    const dispatch = useDispatch();
+    const cartdata = useSelector((state) => state.cart);
+    // const [searchdata, setSearchdata] = useState("");
+    // const [data, setData] = useState([]);
+    // const [searchresult, setSearchresult] = useState([])
+
+    // const cartcount=parseInt(cartdata.length);
+    // const quantity = cartdata.length > 0 ? cartdata[0].quantity : 0;
+    const quantity = cartdata.reduce((total, item) => total + item.quantity, 0);
+
+    // search api
+    // const searchapi = async () => {
+    //     try {
+    //         const res = await axios.get("https://demo.dataverse.org/api/search?q=trees");
+    //         if (res.data.status === "OK") {
+    //             const apiData = res.data.data.items.map(item => ({
+    //                 id: item.id,
+    //                 name: item.name,
+    //                 imageUrl: item.image_url, // Replace with the actual property for image URL
+    //                 description: item.description // Replace with the actual property for URL
+    //             }));
+    //             setData(apiData);
+    //             console.log('data', apiData);
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     searchapi();
+    // }, []);
+
+    // const handleSearch = (e) => {
+    //     setSearchdata(e.target.value);
+
+    //     // Fix the filtering logic
+    //     const result = e.target.value
+    //         ? data && data.filter(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()))
+    //         : []; // Show all data when the search field is empty
+    //     setSearchresult(result);
+    // }
+
+
+
+
     return (
         <Headersection>
             <Container>
                 <AppBar sx={{ background: 'transparent', position: 'relative', boxShadow: 'none' }}>
                     <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Box>
+                        <Link to="/">
                             <img src="/images/logo.svg" alt="logo" />
-                        </Box>
+                        </Link>
+                        {/* <Stack>
+                            <TextField variant='outlined' placeholder="Search..." size="small" fullWidth value={searchdata} onChange={handleSearch} />
+                        </Stack> */}
 
                         <LinkBox sx={{ display: { lg: 'block', md: 'block', sm: 'none', xs: 'none' } }}>
                             <NavLink to="/" >Home</NavLink>
@@ -87,19 +139,26 @@ function Header() {
                             </Link>
 
 
-                            <NavLink to="/cart">
-                                <BsCart2 color="#ff3f26" />
-                                <span>{cartdata.length}</span>
-                            </NavLink>
+                            <IconButton sx={{ background: 'transparent' }} onClick={() => setOpencart(true)}>
+                                <Badge color="secondary" badgeContent={quantity}>
+                                    <RiShoppingBasketFill color="#ff3f26" style={{ fontSize: '20px' }} />
+
+                                </Badge>
+                            </IconButton>
+
 
                         </LinkBox>
-                       {/* add to cart */}
-                       <Box sx={{display:{lg:'none',md:'none',sm:'block',xs:'block'}}}>
-                       <NavLink to="/cart">
-                            <BsCart2 color="#ff3f26" />
-                            <span >0</span>
-                        </NavLink>
-                       </Box>
+                        {/* add to cart */}
+                        <Box sx={{ display: { lg: 'none', md: 'none', sm: 'block', xs: 'block' } }}>
+
+                            <IconButton sx={{ background: 'transparent' }} onClick={() => setOpencart(true)}>
+                                <Badge color="secondary" badgeContent={quantity}>
+                                    <RiShoppingBasketFill color="#ff3f26" style={{ fontSize: '20px' }} />
+
+                                </Badge>
+                            </IconButton>
+
+                        </Box>
                         {/* mobile menu */}
                         <Box sx={{ display: { lg: 'none', md: 'none', sm: 'block', xs: 'block' } }}>
                             <IconButton onClick={() => setOpen(true)}>
@@ -108,6 +167,23 @@ function Header() {
                         </Box>
                     </Toolbar>
                 </AppBar>
+               {/* Search Result section */}
+               {/* <Box>
+                    <List>
+                        {searchresult.map((data) => (
+                            <ListItem key={data.id}>
+                                <Link to={data.url}>{data.name}</Link>
+                                <img src={data.imageUrl} alt={data.name
+                                } />
+                                <Typography variant="body1">{data.description}</Typography>
+                            </ListItem>
+                        ))}
+
+
+                    </List>
+                </Box> */}
+
+
 
 
                 {/* mobile drawer */}
@@ -176,6 +252,7 @@ function Header() {
                     </Box>
                 </Drawer>
             </Container>
+            <Cartcomponent opencart={opencart} setOpencart={setOpencart} />
         </Headersection>
     );
 }
